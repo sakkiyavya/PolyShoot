@@ -1,0 +1,41 @@
+# ============ Unity自动生成的文件夹 ============
+# 这些文件夹可以由Unity重新生成，不应纳入版本控制:cite[2]
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/MemoryCaptures/
+
+# ============ 自动生成的工程文件 ============
+# 由Visual Studio、Rider等IDE生成:cite[2]:cite[4]
+ExportedObj/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+.vs/
+
+# ============ 系统自动生成文件 ============
+.DS_Store*
+Thumbs.db
+Desktop.ini
+
+# ============ Unity特定文件 ============
+# 崩溃报告等:cite[5]:cite[6]
+sysinfo.txt
+*.log
+*.pidb.meta
+
