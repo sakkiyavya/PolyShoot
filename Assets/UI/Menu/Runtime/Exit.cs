@@ -6,7 +6,6 @@ public class Exit : Menu
 {
     public void ExitGame()
     {
-        Debug.Log("exit");
         Application.Quit();
     }
 }

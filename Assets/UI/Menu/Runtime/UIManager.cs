@@ -49,8 +49,8 @@ public class UIManager : MonoBehaviour
     {
         if(UIs.Count > 0)
         {
-            GameObject obj = UIs.Pop();
-            obj.SetActive(false);
+            GameObject UI = UIs.Pop();
+            UIDisappeare(UI);
         }
     }
     public void UIDisappeare(GameObject UI)
@@ -68,6 +68,7 @@ public class UIManager : MonoBehaviour
             yield return null;
         }
         UI.SetActive (false);
+        ReAppeare();
     }
 
     public void OpenBaseMenu()
@@ -78,5 +79,20 @@ public class UIManager : MonoBehaviour
             OpenUI(gameSetting);
         if (exit)
             OpenUI(exit);
+    }
+
+    public void ReAppeare()
+    {
+        if(UIs.Count > 0)
+        {
+            Stack<GameObject> uis = new Stack<GameObject> ();
+            int c = UIs.Count;
+            for(int i = 0;i < c; i++)
+                uis.Push(UIs.Pop());
+
+            c = uis.Count;
+            for(int i = 0;i < c; i++)
+                OpenUI(uis.Pop());
+        }
     }
 }

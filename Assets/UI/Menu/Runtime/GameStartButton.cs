@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class GameStartButton : Menu
 {
-
     public void GameStart()
     {
-        Debug.Log("GameStart");
+        UIManager.instance.CloseUI();
+        UIManager.instance.CloseUI();
+        UIManager.instance.CloseUI();
+        GameManager.instance.isGamePlaying = true;
     }
 }
