@@ -645,33 +645,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 782448b29015aff46987488c58306e49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showPos: {x: 0, y: 0, z: 0}
-  hidePos: {x: 0, y: 0, z: 0}
+  showPos: {x: 107.2, y: -2.299988, z: 0}
+  hidePos: {x: -711, y: -2.299988, z: 0}
   bezierCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2.1049607
+      outSlope: 2.1049607
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.995861
+    - serializedVersion: 3
+      time: 0.689653
+      value: 1.1001221
+      inSlope: 0.008024295
+      outSlope: 0.008024295
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.34409565
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.86995786
+      value: 0.94084144
+      inSlope: -0.0036120543
+      outSlope: -0.0036120543
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.5804623
+      outWeight: 1
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: 0.4113425
+      outSlope: 0.4113425
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 1
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  disappeareTime: 1
+  disappeareTime: 0.9
+  rTran: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1187,33 +1206,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72c4d3dcbb5d3fe4eaf7627eac3c2f79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showPos: {x: 0, y: 0, z: 0}
-  hidePos: {x: 0, y: 0, z: 0}
+  showPos: {x: 107.2, y: -126.3, z: 0}
+  hidePos: {x: -711, y: -126.3, z: 0}
   bezierCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2.1049607
+      outSlope: 2.1049607
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.995861
+    - serializedVersion: 3
+      time: 0.689653
+      value: 1.1001221
+      inSlope: 0.008024295
+      outSlope: 0.008024295
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.34409565
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.86995786
+      value: 0.94084144
+      inSlope: -0.0036120543
+      outSlope: -0.0036120543
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.5804623
+      outWeight: 1
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: 0.4113425
+      outSlope: 0.4113425
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 1
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   disappeareTime: 1
+  rTran: {fileID: 0}
 --- !u!1 &703749891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1468,6 +1506,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   disappeareTime: 1
+  rTran: {fileID: 0}
 --- !u!1 &1101604941
 GameObject:
   m_ObjectHideFlags: 0
@@ -1498,6 +1537,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75079535cf587f947b0e598589fe790a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameStart: {fileID: 1189286765}
+  gameSetting: {fileID: 418244566}
+  exit: {fileID: 624260326}
 --- !u!114 &1101604943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1562,7 +1604,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 107.20001, y: 126.30003}
+  m_AnchoredPosition: {x: 107.2, y: 126.30003}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1189286767
@@ -1675,33 +1717,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2797291f9c79a254787ffec691d34380, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showPos: {x: 0, y: 0, z: 0}
-  hidePos: {x: 0, y: 0, z: 0}
+  showPos: {x: 107.2, y: 126.3, z: 0}
+  hidePos: {x: -711, y: 126.3, z: 0}
   bezierCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2.1049607
+      outSlope: 2.1049607
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.995861
+    - serializedVersion: 3
+      time: 0.689653
+      value: 1.1001221
+      inSlope: 0.008024295
+      outSlope: 0.008024295
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.34409565
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.86995786
+      value: 0.94084144
+      inSlope: -0.0036120543
+      outSlope: -0.0036120543
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.5804623
+      outWeight: 1
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: 0.4113425
+      outSlope: 0.4113425
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 1
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  disappeareTime: 1
+  disappeareTime: 0.8
+  rTran: {fileID: 0}
 --- !u!114 &1189286772
 MonoBehaviour:
   m_ObjectHideFlags: 0
