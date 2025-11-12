@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TriangleEdgeShader
-  m_Shader: {fileID: 4800000, guid: c15ea9c284c28f74faf66d6d7d66258f, type: 3}
+  m_Name: CircleEdgeShader
+  m_Shader: {fileID: 4800000, guid: e3dafc7ec8e9cf347b4a86f19e9309ab, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -29,14 +29,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ColorPower: 70
-    - _Scale: 0.459
+    - _ColorPower: 33.1
+    - _Scale: 0.466
     m_Colors:
-    - _Color1: {r: 0.22291002, g: 0.9245283, b: 0, a: 1}
+    - _Color1: {r: 0, g: 1, b: 0, a: 1}
     - _Color2: {r: 1, g: 1, b: 1, a: 1}
-    - _Offset: {r: 0.5, g: 0.3, b: 0, a: 0}
-    - _p1: {r: 0, g: 1, b: 0, a: 0}
-    - _p2: {r: -0.866025, g: -0.5, b: 0, a: 0}
-    - _p3: {r: 0.866025, g: -0.5, b: 0, a: 0}
-    - p1: {r: 0, g: 1, b: 0, a: 0}
+    - _Offset: {r: 0.5, g: 0.5, b: 0, a: 0}
   m_BuildTextureStacks: []
