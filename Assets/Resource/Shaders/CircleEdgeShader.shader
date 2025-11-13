@@ -8,7 +8,7 @@ Shader "Unlit/CircleEdgeShader"
 
         _Offset("Offset", Vector) = (0, 0, 0, 0)
 
-        _ColorPower("ColorPower", Float) = 5
+        _ColorPower("ColorPower", Int) = 5
         _Scale("Scale", Range(0.1, 0.6)) = 0.5
     }
     SubShader
@@ -37,7 +37,6 @@ Shader "Unlit/CircleEdgeShader"
             struct v2f
             {
                 float2 uv : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
             };
 
@@ -52,7 +51,7 @@ Shader "Unlit/CircleEdgeShader"
             float2 p2;
             float2 p3;
 
-            float _ColorPower;
+            int _ColorPower;
             float _Scale;
 
             v2f vert (appdata v)

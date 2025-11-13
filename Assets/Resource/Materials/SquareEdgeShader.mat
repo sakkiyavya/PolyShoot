@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TriangleEdgeShader
-  m_Shader: {fileID: 4800000, guid: c15ea9c284c28f74faf66d6d7d66258f, type: 3}
+  m_Name: SquareEdgeShader
+  m_Shader: {fileID: 4800000, guid: f5bf0c705928c7d49ae79a53f4d7ba52, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -16,7 +16,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
@@ -29,14 +29,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ColorPower: 50
-    - _Scale: 0.449
+    - _ColorPower: 30
+    - _Scale: 0.8
     m_Colors:
-    - _Color1: {r: 0.22291002, g: 0.9245283, b: 0, a: 1}
+    - _Color1: {r: 1, g: 1, b: 0, a: 1}
     - _Color2: {r: 1, g: 1, b: 1, a: 1}
-    - _Offset: {r: 0.5, g: 0.3, b: 0, a: 0}
-    - _p1: {r: 0, g: 1, b: 0, a: 0}
-    - _p2: {r: -0.866025, g: -0.5, b: 0, a: 0}
-    - _p3: {r: 0.866025, g: -0.5, b: 0, a: 0}
-    - p1: {r: 0, g: 1, b: 0, a: 0}
+    - _Offset: {r: 0.5, g: 0.5, b: 0, a: 0}
   m_BuildTextureStacks: []

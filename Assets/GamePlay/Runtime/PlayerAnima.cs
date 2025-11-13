@@ -15,12 +15,16 @@ public class PlayerAnima : MonoBehaviour
 
     public float footAnimaSpeed = 1f;
     public float footAnimaXRange = 1f;
-    public float footAnimaYRange = 0.6f;
+    public float footAnimaYRange = 1f;
+
+    public float bodyAnimaBreathSpeed = 1f;
+    public float bodyAnimaBreathIntensity = 1f;
 
     float moveContinueTime = 0f;
 
     Vector3 headOriginPos;
     Vector3 bodyOriginPos;
+    Vector3 bodyOriginScale;
     Vector3 handOriginPos;
     Vector3 footLeftOriginPos;
     Vector3 footRightOriginPos;
@@ -41,6 +45,7 @@ public class PlayerAnima : MonoBehaviour
         if(GameManager.instance.isGamePlaying && initialed)
         {
             FootAnima();
+            BodyAnima();
         }
     }
 
@@ -62,7 +67,10 @@ public class PlayerAnima : MonoBehaviour
         if(hand)
             handOriginPos = hand.localPosition;
         if(body)
+        {
             bodyOriginPos = body.localPosition;
+            bodyOriginScale = body.localScale;
+        }
         if (hand)
             handOriginPos = hand.localPosition;
         if(footLeft)
@@ -83,13 +91,13 @@ public class PlayerAnima : MonoBehaviour
         {
             case MoveState.right:
                 moveContinueTime -= Time.deltaTime;
-                footLeft.localPosition = new Vector3( - Mathf.Cos(moveContinueTime * footAnimaSpeed) * footAnimaXRange, - Mathf.Sin(moveContinueTime * footAnimaSpeed) * footAnimaYRange, 0) + footCenterOriginPos;
-                footRight.localPosition = new Vector3(Mathf.Cos(moveContinueTime * footAnimaSpeed) * footAnimaXRange, Mathf.Sin(moveContinueTime * footAnimaSpeed) * footAnimaYRange, 0) + footCenterOriginPos;
+                footLeft.localPosition = new Vector3( - Mathf.Cos(moveContinueTime * 5 * footAnimaSpeed) * 0.2f, Mathf.Max( - Mathf.Sin(moveContinueTime * 5 * footAnimaSpeed), 0) * 0.1f, 0) + footCenterOriginPos;
+                footRight.localPosition = new Vector3(Mathf.Cos(moveContinueTime * 5 * footAnimaSpeed) * 0.2f, Mathf.Max(Mathf.Sin(moveContinueTime * 5 * footAnimaSpeed), 0) * 0.1f, 0) + footCenterOriginPos;
                 break;
             case MoveState.left:
                 moveContinueTime += Time.deltaTime;
-                footLeft.localPosition = new Vector3( - Mathf.Cos(moveContinueTime * footAnimaSpeed) * footAnimaXRange, - Mathf.Sin(moveContinueTime * footAnimaSpeed) * footAnimaYRange, 0) + footCenterOriginPos;
-                footRight.localPosition = new Vector3(Mathf.Cos(moveContinueTime * footAnimaSpeed) * footAnimaXRange, Mathf.Sin(moveContinueTime * footAnimaSpeed) * footAnimaYRange, 0) + footCenterOriginPos;
+                footLeft.localPosition = new Vector3( - Mathf.Cos(moveContinueTime * 5 * footAnimaSpeed) * 0.2f, Mathf.Max( - Mathf.Sin(moveContinueTime * 5 * footAnimaSpeed), 0) * 0.1f, 0) + footCenterOriginPos;
+                footRight.localPosition = new Vector3(Mathf.Cos(moveContinueTime * 5 * footAnimaSpeed) * 0.2f, Mathf.Max(Mathf.Sin(moveContinueTime * 5 * footAnimaSpeed), 0) * 0.1f, 0) + footCenterOriginPos;
                 break;
             case MoveState.idle:
                 moveContinueTime = 0;
@@ -98,10 +106,17 @@ public class PlayerAnima : MonoBehaviour
                 break;
             case MoveState.jump:
                 moveContinueTime = 0;
-
+                footLeft.localPosition = footLeftOriginPos - playerControl.rigidBody.velocity.y * new Vector3(0, 0.02f, 0);
+                footRight.localPosition = footRightOriginPos - playerControl.rigidBody.velocity.y * new Vector3(0, 0.02f, 0);
                 break;
             default:
                 break;
         }
     }    
+
+    void BodyAnima()
+    {
+        body.localPosition = bodyOriginPos + bodyAnimaBreathIntensity * 0.03f * Mathf.Sin(Time.time * bodyAnimaBreathSpeed) * Vector3.up;
+        body.localScale = bodyOriginScale * (1 + bodyAnimaBreathIntensity * 0.07f * Mathf.Sin(Time.time * bodyAnimaBreathSpeed));
+    }
 }
