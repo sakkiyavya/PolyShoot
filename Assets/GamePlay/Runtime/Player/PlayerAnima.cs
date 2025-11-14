@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using MoveState = PlayerControl.MoveState;
 
+[RequireComponent(typeof(PlayerControl))]
 public class PlayerAnima : MonoBehaviour
 {
     public Transform head;
@@ -20,6 +22,10 @@ public class PlayerAnima : MonoBehaviour
     public float bodyAnimaBreathSpeed = 1f;
     public float bodyAnimaBreathIntensity = 1f;
 
+    public float handLength = 1f;
+
+    public float headHittedOffset = 1f;
+
     float moveContinueTime = 0f;
 
     Vector3 headOriginPos;
@@ -28,8 +34,8 @@ public class PlayerAnima : MonoBehaviour
     Vector3 handOriginPos;
     Vector3 footLeftOriginPos;
     Vector3 footRightOriginPos;
-
     Vector3 footCenterOriginPos;
+    Vector3 mousePos;
 
     bool initialed = false;
 
@@ -46,6 +52,8 @@ public class PlayerAnima : MonoBehaviour
         {
             FootAnima();
             BodyAnima();
+            HandAnima();
+            HeadAnima();
         }
     }
 
@@ -64,8 +72,8 @@ public class PlayerAnima : MonoBehaviour
         if(!playerControl)
             playerControl = GetComponent<PlayerControl>();
 
-        if(hand)
-            handOriginPos = hand.localPosition;
+        if(head)
+            headOriginPos = head.localPosition;
         if(body)
         {
             bodyOriginPos = body.localPosition;
@@ -87,17 +95,20 @@ public class PlayerAnima : MonoBehaviour
 
     void FootAnima()
     {
-        switch(playerControl.moveState)
+        footAnimaSpeed = playerControl.runSpeed;
+        footAnimaXRange = Mathf.Log10(playerControl.runSpeed) + 1;
+        footAnimaYRange = Mathf.Log10(playerControl.runSpeed) + 1;
+        switch (playerControl.moveState)
         {
             case MoveState.right:
                 moveContinueTime -= Time.deltaTime;
-                footLeft.localPosition = new Vector3( - Mathf.Cos(moveContinueTime * 5 * footAnimaSpeed) * 0.2f, Mathf.Max( - Mathf.Sin(moveContinueTime * 5 * footAnimaSpeed), 0) * 0.1f, 0) + footCenterOriginPos;
-                footRight.localPosition = new Vector3(Mathf.Cos(moveContinueTime * 5 * footAnimaSpeed) * 0.2f, Mathf.Max(Mathf.Sin(moveContinueTime * 5 * footAnimaSpeed), 0) * 0.1f, 0) + footCenterOriginPos;
+                footLeft.localPosition = new Vector3( - Mathf.Cos(moveContinueTime * 5 * 1.5f * footAnimaSpeed) * 0.2f * footAnimaXRange, Mathf.Max( - Mathf.Sin(moveContinueTime * 5 * 1.5f * footAnimaSpeed), 0) * 0.1f * footAnimaYRange, 0) + footCenterOriginPos;
+                footRight.localPosition = new Vector3(Mathf.Cos(moveContinueTime * 5 * 1.5f * footAnimaSpeed) * 0.2f * footAnimaXRange, Mathf.Max(Mathf.Sin(moveContinueTime * 5 * 1.5f * footAnimaSpeed), 0) * 0.1f * footAnimaYRange, 0) + footCenterOriginPos;
                 break;
             case MoveState.left:
                 moveContinueTime += Time.deltaTime;
-                footLeft.localPosition = new Vector3( - Mathf.Cos(moveContinueTime * 5 * footAnimaSpeed) * 0.2f, Mathf.Max( - Mathf.Sin(moveContinueTime * 5 * footAnimaSpeed), 0) * 0.1f, 0) + footCenterOriginPos;
-                footRight.localPosition = new Vector3(Mathf.Cos(moveContinueTime * 5 * footAnimaSpeed) * 0.2f, Mathf.Max(Mathf.Sin(moveContinueTime * 5 * footAnimaSpeed), 0) * 0.1f, 0) + footCenterOriginPos;
+                footLeft.localPosition = new Vector3( - Mathf.Cos(moveContinueTime * 5 * 1.5f * footAnimaSpeed) * 0.2f * footAnimaXRange, Mathf.Max( - Mathf.Sin(moveContinueTime * 5 * 1.5f * footAnimaSpeed), 0) * 0.1f * footAnimaYRange, 0) + footCenterOriginPos;
+                footRight.localPosition = new Vector3(Mathf.Cos(moveContinueTime * 5 * 1.5f * footAnimaSpeed) * 0.2f * footAnimaXRange, Mathf.Max(Mathf.Sin(moveContinueTime * 5 * 1.5f * footAnimaSpeed), 0) * 0.1f * footAnimaYRange, 0) + footCenterOriginPos;
                 break;
             case MoveState.idle:
                 moveContinueTime = 0;
@@ -118,5 +129,32 @@ public class PlayerAnima : MonoBehaviour
     {
         body.localPosition = bodyOriginPos + bodyAnimaBreathIntensity * 0.03f * Mathf.Sin(Time.time * bodyAnimaBreathSpeed) * Vector3.up;
         body.localScale = bodyOriginScale * (1 + bodyAnimaBreathIntensity * 0.07f * Mathf.Sin(Time.time * bodyAnimaBreathSpeed));
+    }
+
+    void HandAnima()
+    {
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0;
+        hand.localPosition = bodyOriginPos + handLength * Vector3.Normalize(mousePos - transform.position) * 0.4f;
+    }
+    void HeadAnima()
+    {
+        head.localPosition = Vector3.Lerp(head.localPosition, headOriginPos, 0.1f);
+    }
+    void HeadAnima(Vector3 dir, float damage)
+    {
+        head.localPosition = headOriginPos + dir.normalized * Mathf.Log10(damage) * 0.1f;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //Debug.Log(collision.name);
+        if(collision.gameObject.layer == 9)
+        {
+            if(collision.gameObject.GetComponent<Projectile>())
+            {
+                HeadAnima(transform.position - collision.transform.position, collision.gameObject.GetComponent<Projectile>().damage);
+            }
+        }
     }
 }

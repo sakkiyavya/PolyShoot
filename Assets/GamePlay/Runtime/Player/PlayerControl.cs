@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
+    public static PlayerControl instance;
     public enum MoveState
     {
         idle = 0,
@@ -16,12 +17,15 @@ public class PlayerControl : MonoBehaviour
 
     public float jumpForce = 1f;
     public float maxJumpKeyTime = 0.3f;
+    public float runSpeed = 1f;
 
     float jumpKeyTime = 0;
     void Awake()
     {
         if(!rigidBody)
             rigidBody = GetComponent<Rigidbody2D>();
+
+        instance = this;
     }
 
     void Update()
@@ -58,13 +62,14 @@ public class PlayerControl : MonoBehaviour
     }
     void MoveLogicControl()
     {
+        rigidBody.velocity = new Vector2(0, rigidBody.velocity.y);
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-
+            rigidBody.velocity = new Vector2(- runSpeed * 1.5f, rigidBody.velocity.y);
         }
         else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightAlt))
         {
-
+            rigidBody.velocity = new Vector2( runSpeed * 1.5f, rigidBody.velocity.y);
         }
 
         if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.Space))
@@ -72,7 +77,7 @@ public class PlayerControl : MonoBehaviour
             if(jumpKeyTime > 0)
             {
                 jumpKeyTime -= Time.deltaTime;
-                rigidBody.AddForce(jumpForce * Vector3.up * jumpKeyTime * jumpKeyTime);
+                rigidBody.AddForce(jumpForce * 100 * Vector3.up * jumpKeyTime * jumpKeyTime);
             }
         }
 

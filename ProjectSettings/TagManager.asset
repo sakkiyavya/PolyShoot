@@ -14,9 +14,9 @@ TagManager:
   - PlayerDamage
   - PlayerPhysics
   - Platform
-  - 
-  - 
-  - 
+  - EnemyProjectile
+  - Enemy
+  - PlayerProjedtile
   - 
   - 
   - 
