@@ -12,10 +12,13 @@ public class ProjectileTest : MonoBehaviour
     GameObject tempObj;
     private void Update()
     {
-        if(Time.time > nextShootTime)
+        if(GameManager.instance.isGamePlaying)
         {
-            nextShootTime = Time.time + interval;
-            Shoot();
+            if(Time.time > nextShootTime)
+            {
+                nextShootTime = Time.time + interval;
+                Shoot();
+            }
         }
     }
     void Shoot()
@@ -26,7 +29,7 @@ public class ProjectileTest : MonoBehaviour
             Vector2 p = new Vector2(3, Random.Range(-90f, 90f));
             p = new Vector2(p.x * Mathf.Cos(p.y), p.x * Mathf.Sin(p.y));
             tempObj.transform.position = new Vector3(p.x, p.y, 0) + PlayerControl.instance.transform.position;
-            tempObj.GetComponent<Projectile>().dir = -p;
+            tempObj.GetComponent<Projectile>().dir = -p.normalized;
         }
         else
         {

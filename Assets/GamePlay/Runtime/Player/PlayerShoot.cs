@@ -5,11 +5,18 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerState))]
 public class PlayerShoot : MonoBehaviour
 {
-    public List<GameObject> preProjectiles = new List<GameObject>();
-    public Queue<GameObject> projectiles = new Queue<GameObject>();
+    public static PlayerShoot instance;
+    public List<GameObject> originMagazine = new List<GameObject>();
+    public Queue<GameObject> Magazine = new Queue<GameObject>();
     public float shootSpeed = 1f;
     public float reloadSpeed = 1f;
     public float shootAngle = 10f;
+    public float shootScale = 1f;
+    public AudioClip shootSoundClip;
+    public AudioClip reloadSoundClip;
+    public AudioSource[] shootSoundSource = null;
+    public Rigidbody2D rigidBody;
+    public Crosshair crosshair;
 
     bool canShoot = true;
     public float reloadProgress = 0;
@@ -22,15 +29,24 @@ public class PlayerShoot : MonoBehaviour
     Vector3 mousePos;
     private void Awake()
     {
+        instance = this;
+
         if(!hand)
             hand = transform.Find("Hand");
+
+        shootSoundSource = GetComponents<AudioSource>();
+        if (!rigidBody)
+            rigidBody = GetComponent<Rigidbody2D>();
+        if(!crosshair)
+            crosshair = GetComponent<Crosshair>();
     }
     private void Start()
     {
-        for (int i = 0; i < preProjectiles.Count; i++)
+        for (int i = 0; i < originMagazine.Count; i++)
         {
-            projectiles.Enqueue(preProjectiles[i]);
+            Magazine.Enqueue(originMagazine[i]);
         }
+        MagazineInformation.instance.UpdateProjectiles();
     }
     private void Update()
     {
@@ -43,7 +59,7 @@ public class PlayerShoot : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Mouse0) && canShoot)
         {
-            if(projectiles.Count <= 0)
+            if(Magazine.Count <= 0)
             {
                 ReloadProjectiles();
                 canShoot = false;
@@ -51,15 +67,25 @@ public class PlayerShoot : MonoBehaviour
             {
                 if(nextShootTime < Time.time)
                 {
+                    if(shootSoundClip)
+                    {
+                        shootSoundSource[0].clip = shootSoundClip;
+                        shootSoundSource[0].volume = VolumeSlider.instance.volume;
+                        shootSoundSource[0].Play();
+                    }
                     mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     mousePos.z = 0;
-                    tempObj = Instantiate(projectiles.Dequeue());
+                    tempObj = Instantiate(Magazine.Dequeue());
+                    tempObj.transform.localScale *= shootScale;
                     tempProjectile = tempObj.GetComponent<Projectile>();
                     nextShootTime = Time.time + 1f / (tempProjectile.shootSpeed + shootSpeed);
                     tempProjectile.dir = Vector3.Normalize(mousePos - transform.position);
                     shootAngle = Mathf.Max(0, shootAngle);
                     tempProjectile.dir = Quaternion.AngleAxis(Random.Range(-shootAngle / 2, shootAngle / 2), Vector3.forward) * tempProjectile.dir;
+                    rigidBody.AddForce(- tempProjectile.dir.normalized * tempProjectile.recoil * 50);
                     tempProjectile.transform.position = hand.transform.position;
+                    MagazineInformation.instance.UpdateProjectileInformation();
+                    crosshair.Shake();
                 }
             }
         }
@@ -70,16 +96,47 @@ public class PlayerShoot : MonoBehaviour
     }
     IEnumerator Reload()
     {
-        while(reloadTime < 1f / reloadSpeed)
+        if (reloadSoundClip)
+        {
+            shootSoundSource[1].clip = reloadSoundClip;
+            shootSoundSource[1].volume = VolumeSlider.instance.volume;
+            shootSoundSource[1].PlayDelayed(0.2f);
+        }
+        while (reloadTime < 1f / reloadSpeed)
         {
             reloadTime += Time.deltaTime;
             reloadProgress = reloadTime / (1f / reloadSpeed);
         }
         yield return new WaitForSeconds(1f / reloadSpeed);
-        for(int i = 0;i < preProjectiles.Count;i++)
+        for(int i = 0;i < originMagazine.Count;i++)
         {
-            projectiles.Enqueue(preProjectiles[i]);
+            Magazine.Enqueue(originMagazine[i]);
         }
         canShoot = true;
+        MagazineInformation.instance.UpdateProjectileInformation();
+    }
+
+    public void ChangeMagezine(GameObject projectile)
+    {
+        if (projectile.GetComponent<Projectile>())
+        {
+            originMagazine.Add(projectile);
+            MagazineInformation.instance.UpdateProjectiles();
+        }
+    }
+    public void ChangeMagezine(List<GameObject> newMagazine)
+    {
+        bool invaild = true;
+        foreach(var p in newMagazine)
+        {
+            if(!p.GetComponent<Projectile>())
+                invaild = false;
+        }
+        if(invaild)
+        {
+            originMagazine.Clear();
+            originMagazine = newMagazine;
+            MagazineInformation.instance.UpdateProjectiles();
+        }
     }
 }

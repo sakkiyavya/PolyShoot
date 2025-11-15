@@ -11,8 +11,16 @@ public class UIManager : MonoBehaviour
     public GameObject gameSetting;
     public GameObject exit;
 
-    Stack<GameObject> UIs = new Stack<GameObject>();
+    public AudioClip UISelect;
+    public AudioClip UIClick;
+    public AudioSource audioSource;
 
+
+    Stack<GameObject> UIs = new Stack<GameObject>();
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     private void Start()
     {
         if (!instance)
@@ -29,7 +37,11 @@ public class UIManager : MonoBehaviour
         UIAppeare(UI);
         UIs.Push(UI);
     }
-    public void UIAppeare(GameObject UI)
+    public void OpenUIEndure(GameObject UI)
+    {
+        UIAppeare(UI);
+    }
+    void UIAppeare(GameObject UI)
     {
         StartCoroutine(IUIAppeare(UI));
     }
@@ -53,7 +65,7 @@ public class UIManager : MonoBehaviour
             UIDisappeare(UI);
         }
     }
-    public void UIDisappeare(GameObject UI)
+    void UIDisappeare(GameObject UI)
     {
         StartCoroutine(IUIDisappeare(UI));
     }
@@ -71,7 +83,7 @@ public class UIManager : MonoBehaviour
         ReAppeare();
     }
 
-    public void OpenBaseMenu()
+    void OpenBaseMenu()
     {
         if (gameStart)
             OpenUI(gameStart);
@@ -81,7 +93,7 @@ public class UIManager : MonoBehaviour
             OpenUI(exit);
     }
 
-    public void ReAppeare()
+    void ReAppeare()
     {
         if(UIs.Count > 0)
         {

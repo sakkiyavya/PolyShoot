@@ -26,6 +26,8 @@ public class PlayerAnima : MonoBehaviour
 
     public float headHittedOffset = 1f;
 
+    public float deadAnimaTime = 1f;
+
     float moveContinueTime = 0f;
 
     Vector3 headOriginPos;
@@ -155,6 +157,35 @@ public class PlayerAnima : MonoBehaviour
             {
                 HeadAnima(transform.position - collision.transform.position, collision.gameObject.GetComponent<Projectile>().damage);
             }
+        }
+    }
+
+    public void StartDeadAnima(Vector2 d)
+    {
+        StartCoroutine(DeadAnima(d));
+    }
+
+    IEnumerator DeadAnima(Vector2 d)
+    {
+        float t = 0;
+        float p = 10;
+        while(t < deadAnimaTime)
+        {
+            t += Time.deltaTime;
+            head.localPosition += new Vector3(d.x * p, 0.2f * d.y * p, 0) * Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime;
+            head.localPosition = new Vector3(head.localPosition.x, Mathf.Max(head.localPosition.y, footCenterOriginPos.y), 0);
+
+            body.localPosition += new Vector3(d.x * p, 0.1f * d.y * p, 0) * Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime;
+            body.localPosition = new Vector3(body.localPosition.x, Mathf.Max(body.localPosition.y, footCenterOriginPos.y), 0);
+            body.Rotate(0, 0, Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime * 30);
+
+            hand.localPosition += new Vector3(d.x * p,  0.05f * d.y * p, 0) * Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime;
+            hand.localPosition = new Vector3(hand.localPosition.x, Mathf.Max(hand.localPosition.y, footCenterOriginPos.y), 0);
+
+            footLeft.localPosition += new Vector3(d.x * p, 0, 0) * Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime;
+            footRight.localPosition += new Vector3(d.x * 0.9f * p, 0, 0) * Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime;
+
+            yield return null;
         }
     }
 }

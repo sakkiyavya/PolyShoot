@@ -33,8 +33,11 @@ public class PlayerControl : MonoBehaviour
         if(GameManager.instance.isGamePlaying)
         {
             MoveStateControl();
-            MoveLogicControl();
         }
+    }
+    private void FixedUpdate()
+    {
+        MoveLogicControl();
     }
 
     void MoveStateControl()
@@ -62,7 +65,7 @@ public class PlayerControl : MonoBehaviour
     }
     void MoveLogicControl()
     {
-        rigidBody.velocity = new Vector2(0, rigidBody.velocity.y);
+        rigidBody.velocity = new Vector2(Mathf.Lerp(rigidBody.velocity.x, 0, 0.04f), rigidBody.velocity.y);
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             rigidBody.velocity = new Vector2(- runSpeed * 1.5f, rigidBody.velocity.y);
@@ -77,7 +80,9 @@ public class PlayerControl : MonoBehaviour
             if(jumpKeyTime > 0)
             {
                 jumpKeyTime -= Time.deltaTime;
-                rigidBody.AddForce(jumpForce * 100 * Vector3.up * jumpKeyTime * jumpKeyTime);
+                jumpKeyTime = Mathf.Max(0, jumpKeyTime);
+                rigidBody.AddForce(jumpForce * 750 * Vector3.up * jumpKeyTime * jumpKeyTime);
+                //rigidBody.velocity = new Vector3(rigidBody.velocity.x, jumpForce * (1 + jumpKeyTime * jumpKeyTime), 0);
             }
         }
 

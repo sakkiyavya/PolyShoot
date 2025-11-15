@@ -12,4 +12,5 @@ public class SettingReturn : Menu
             UIManager.instance.CloseUI();
         }
     }
+    
 }
