@@ -31,17 +31,20 @@ public class MagazineInformation : Menu
     }
     public void UpdateProjectileInformation()
     {
-        int a = PlayerShoot.instance.originMagazine.Count - PlayerShoot.instance.Magazine.Count - 1;
-        for(int i = 0;i < projectileInformations.Count;i++)
+        if(GameManager.instance.isGamePlaying)
         {
-            if (i <= a)
+            int a = PlayerShoot.instance.originMagazine.Count - PlayerShoot.instance.Magazine.Count - 1;
+            for(int i = 0;i < projectileInformations.Count && i < PlayerShoot.instance.originMagazine.Count; i++)
             {
-                Color c = projectileInformations[i].GetComponent<Image>().color;
-                c.a = 0.2f;
-                projectileInformations[i].GetComponent<Image>().color = c;
+                if (i <= a)
+                {
+                    Color c = projectileInformations[i].GetComponent<Image>().color;
+                    c.a = 0.2f;
+                    projectileInformations[i].GetComponent<Image>().color = c;
+                }
+                else
+                    projectileInformations[i].GetComponent<Image>().color = PlayerShoot.instance.originMagazine[i].GetComponent<Projectile>().color;
             }
-            else
-                projectileInformations[i].GetComponent<Image>().color = PlayerShoot.instance.originMagazine[i].GetComponent<Projectile>().color;
         }
 
     }

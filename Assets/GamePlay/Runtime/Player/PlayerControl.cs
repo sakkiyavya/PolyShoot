@@ -37,7 +37,10 @@ public class PlayerControl : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        MoveLogicControl();
+        if (GameManager.instance.isGamePlaying)
+        {
+            MoveLogicControl();
+        }
     }
 
     void MoveStateControl()

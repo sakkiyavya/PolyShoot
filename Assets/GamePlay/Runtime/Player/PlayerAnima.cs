@@ -172,14 +172,14 @@ public class PlayerAnima : MonoBehaviour
         while(t < deadAnimaTime)
         {
             t += Time.deltaTime;
-            head.localPosition += new Vector3(d.x * p, 0.2f * d.y * p, 0) * Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime;
+            head.localPosition += new Vector3(d.x * p, 1f * d.y * p, 0) * Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime;
             head.localPosition = new Vector3(head.localPosition.x, Mathf.Max(head.localPosition.y, footCenterOriginPos.y), 0);
 
-            body.localPosition += new Vector3(d.x * p, 0.1f * d.y * p, 0) * Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime;
+            body.localPosition += new Vector3(d.x * p, 0.5f * d.y * p, 0) * Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime;
             body.localPosition = new Vector3(body.localPosition.x, Mathf.Max(body.localPosition.y, footCenterOriginPos.y), 0);
             body.Rotate(0, 0, Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime * 30);
 
-            hand.localPosition += new Vector3(d.x * p,  0.05f * d.y * p, 0) * Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime;
+            hand.localPosition += new Vector3(d.x * p,  0.6f * d.y * p, 0) * Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime;
             hand.localPosition = new Vector3(hand.localPosition.x, Mathf.Max(hand.localPosition.y, footCenterOriginPos.y), 0);
 
             footLeft.localPosition += new Vector3(d.x * p, 0, 0) * Time.deltaTime * (deadAnimaTime - t) / deadAnimaTime;

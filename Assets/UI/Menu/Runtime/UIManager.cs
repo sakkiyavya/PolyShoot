@@ -21,6 +21,14 @@ public class UIManager : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
     }
+    private void OnEnable()
+    {
+        EventCenter.GameOver += OpenBaseMenu;
+    }
+    private void OnDisable()
+    {
+        EventCenter.GameOver -= OpenBaseMenu;
+    }
     private void Start()
     {
         if (!instance)
