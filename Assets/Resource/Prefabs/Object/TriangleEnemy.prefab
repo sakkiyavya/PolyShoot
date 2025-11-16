@@ -101,12 +101,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 0}
   isContactDamage: 1
-  MaxHP: 30
+  MaxHP: 9
   speed: 1
   hitBackForce: 10
   damage: 2
+  evalue: 50
+  lifeTime: 30
   rigidBody: {fileID: 0}
   moveDir: {x: 0, y: 1}
+  boss: {fileID: 4289162341133489260, guid: 30a51438c0126c846b3fee61dda767fe, type: 3}
 --- !u!50 &105958497843997772
 Rigidbody2D:
   serializedVersion: 4

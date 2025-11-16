@@ -7,9 +7,12 @@ Shader "Unlit/SquareEdgeShader"
         _Color2 ("Color2", Color) = (1,1,1,1)
 
         _Offset("Offset", Vector) = (0, 0, 0, 0)
+        _XYScale("XYScale", Vector) = (1, 1, 0, 0)
 
         _ColorPower("ColorPower", Int) = 5
         _Scale("Scale", Range(0.1, 2.0)) = 0.5
+
+        
     }
     SubShader
     {
@@ -20,7 +23,7 @@ Shader "Unlit/SquareEdgeShader"
 
         Pass
         {
-            CGPROGRAM
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
             // make fog work
@@ -38,14 +41,17 @@ Shader "Unlit/SquareEdgeShader"
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
+                float4 p : TEXCOORD1;
+                float4 scale : TEXCOORD2;
             };
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
-            float4 _Color1;
-            float4 _Color2;
+            half4 _Color1;
+            half4 _Color2;
             float4 _Offset;
+            float4 _XYScale;
 
             float2 p1;
             float2 p2;
@@ -79,26 +85,30 @@ Shader "Unlit/SquareEdgeShader"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+
+
+                float4 p = float4 (0, 0, 0, 0);
+                p.xy = o.uv.xy - _Offset;
+                o.p = _XYScale * p;
+                float4 scale = float4(1, 1, 0, 0);
+                o.scale = _XYScale * scale;
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            half4 frag (v2f i) : SV_Target
             {
-                float2 p = i.uv.xy - _Offset;
-                float2 scale = float2(1, 1);
-
-                p = mul(UNITY_MATRIX_M, p);
-                scale = mul(UNITY_MATRIX_M, scale);
-                float2 v1 = float2(0.5, 0.5) * _Scale * scale;
-                float2 v2 = float2(-0.5, 0.5) * _Scale * scale;
-                float2 v3 = float2(-0.5, -0.5) * _Scale * scale;
-                float2 v4 = float2(0.5, -0.5) * _Scale * scale;
 
 
-                float d1 = 1 - DistanceToLine(v1, v2, p) / _Scale;
-                float d2 = 1 - DistanceToLine(v2, v3, p) / _Scale;
-                float d3 = 1 - DistanceToLine(v3, v4, p) / _Scale;
-                float d4 = 1 - DistanceToLine(v4, v1, p) / _Scale;
+                float2 v1 = float2(0.5, 0.5) * _Scale * i.scale.xy;
+                float2 v2 = float2(-0.5, 0.5) * _Scale * i.scale.xy;
+                float2 v3 = float2(-0.5, -0.5) * _Scale * i.scale.xy;
+                float2 v4 = float2(0.5, -0.5) * _Scale * i.scale.xy;
+
+
+                float d1 = 1 - DistanceToLine(v1, v2, i.p.xy) / _Scale;
+                float d2 = 1 - DistanceToLine(v2, v3, i.p.xy) / _Scale;
+                float d3 = 1 - DistanceToLine(v3, v4, i.p.xy) / _Scale;
+                float d4 = 1 - DistanceToLine(v4, v1, i.p.xy) / _Scale;
 
                 d1 = saturate(d1);
                 d2 = saturate(d2);
@@ -110,7 +120,7 @@ Shader "Unlit/SquareEdgeShader"
                 d3 = pow(d3, _ColorPower);
                 d4 = pow(d4, _ColorPower);
 
-                fixed4 col = _Color1;
+                half4 col = _Color1;
                 col.w = 0;
                 col.w += d1 / 4;
                 col.w += d2 / 4;
@@ -119,7 +129,7 @@ Shader "Unlit/SquareEdgeShader"
 
                 return col;
             }
-            ENDCG
+            ENDHLSL
         }
     }
 }

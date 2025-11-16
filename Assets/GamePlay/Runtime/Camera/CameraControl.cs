@@ -10,7 +10,7 @@ public class CameraControl : MonoBehaviour
     public float camFollowSpeed = 1;
     public float camMouseOffset = 0.3f;
     Vector3 mousePos;
-    private void Update()
+    private void LateUpdate()
     {
         if(GameManager.instance.isGamePlaying)
         {

@@ -2,15 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Buff : MonoBehaviour
+public class Buff
 {
-    public virtual void ApplyBuff()
+    public virtual bool isLastingBuff
     {
-        Debug.Log("ApplyBuff");
+        get 
+        {
+            return false;
+        }
+    }
+    public virtual string description
+    {
+        get
+        {
+            return "ÎÞ¼Ó³É";
+        }
+    }
+    public virtual void ApplyBuff(PlayerControl playerControl, PlayerShoot playerShoot, PlayerState playerState)
+    {
+        //Debug.Log("ApplyBuff");
     }
 
-    public virtual void UndoBuff()
+    public virtual void RemoveBuff(PlayerControl playerControl, PlayerShoot playerShoot, PlayerState playerState)
     {
-        Debug.Log("UndoBuff");
+        //Debug.Log("RemoveBuff");
+    }
+
+    public virtual Buff DeepCopy()
+    {
+        Buff buff = new Buff();
+
+        return buff;
     }
 }

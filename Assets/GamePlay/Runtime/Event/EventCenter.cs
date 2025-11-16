@@ -22,4 +22,16 @@ public static class EventCenter
     {
         GameOver?.Invoke();
     }
+
+    public static event Action GamePause;
+    public static void CallGamePause()
+    {
+        GamePause?.Invoke();
+    }
+
+    public static event Action GameResume;
+    public static void CallGameResume()
+    {
+        GameResume?.Invoke();
+    }
 }

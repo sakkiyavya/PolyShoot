@@ -11,6 +11,9 @@ public class UIManager : MonoBehaviour
     public GameObject gameSetting;
     public GameObject exit;
 
+    public GameObject[] endGame = new GameObject[2];
+    bool isOpenEndGame = false;
+
     public AudioClip UISelect;
     public AudioClip UIClick;
     public AudioSource audioSource;
@@ -38,6 +41,39 @@ public class UIManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
         OpenBaseMenu();
+    }
+    private void Update()
+    {
+        if(GameManager.instance.isGamePlaying)
+        {
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                if(!isOpenEndGame)
+                {
+                    for (int i = 0; i < endGame.Length; i++)
+                    {
+                        OpenUI(endGame[i]);
+                        EventCenter.CallGamePause();
+                    }
+                    isOpenEndGame = true;
+                    return;
+                }
+            }
+        }
+
+        if(isOpenEndGame)
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                for (int i = 0; i < endGame.Length; i++)
+                {
+                    CloseUI();
+                    EventCenter.CallGameResume();
+                }
+                isOpenEndGame = false;
+            }
+        }
+
     }
 
     public void OpenUI(GameObject UI)

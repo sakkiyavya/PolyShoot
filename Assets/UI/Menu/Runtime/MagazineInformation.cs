@@ -22,10 +22,15 @@ public class MagazineInformation : Menu
     public void UpdateProjectiles()
     {
         projectiles = PlayerShoot.instance.originMagazine;
+        for(int i = 0;i < projectileInformations.Count;i++)
+        {
+            Destroy(projectileInformations[i]);
+        }
+        projectileInformations.Clear();
         for(int i = 0;i < projectiles.Count;i++)
         {
             projectileInformations.Add(Instantiate(projectileInformationPrefab,transform));
-            projectileInformations[i].GetComponent<RectTransform>().localPosition = new Vector3(-20, -20 - i * 30, 0);
+            projectileInformations[i].GetComponent<RectTransform>().localPosition = new Vector3(-20 - (i / 20) * 30, -20 - (i % 20) * 30, 0);
         }
         UpdateProjectileInformation();
     }
@@ -38,7 +43,7 @@ public class MagazineInformation : Menu
             {
                 if (i <= a)
                 {
-                    Color c = projectileInformations[i].GetComponent<Image>().color;
+                    Color c = PlayerShoot.instance.originMagazine[i].GetComponent<Projectile>().color;
                     c.a = 0.2f;
                     projectileInformations[i].GetComponent<Image>().color = c;
                 }

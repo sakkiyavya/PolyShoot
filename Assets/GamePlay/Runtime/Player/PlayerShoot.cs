@@ -8,6 +8,8 @@ public class PlayerShoot : MonoBehaviour
     public static PlayerShoot instance;
     public List<GameObject> originMagazine = new List<GameObject>();
     public Queue<GameObject> Magazine = new Queue<GameObject>();
+    public float shootDamage = 0;
+    public float projectileSpeed = 0;
     public float shootSpeed = 1f;
     public float reloadSpeed = 1f;
     public float shootAngle = 10f;
@@ -17,6 +19,7 @@ public class PlayerShoot : MonoBehaviour
     public AudioSource[] shootSoundSource = null;
     public Rigidbody2D rigidBody;
     public Crosshair crosshair;
+    public PlayerBuff playerBuff;
 
     bool canShoot = true;
     public float reloadProgress = 0;
@@ -39,6 +42,8 @@ public class PlayerShoot : MonoBehaviour
             rigidBody = GetComponent<Rigidbody2D>();
         if(!crosshair)
             crosshair = GetComponent<Crosshair>();
+        if(!playerBuff)
+            playerBuff = GetComponent<PlayerBuff>();
     }
     private void Start()
     {
@@ -53,6 +58,8 @@ public class PlayerShoot : MonoBehaviour
         if(GameManager.instance.isGamePlaying)
         {
             Shoot();
+            if(Input.GetKeyDown(KeyCode.R))
+                ReloadProjectiles();
         }
     }
     public void Shoot()
@@ -78,12 +85,22 @@ public class PlayerShoot : MonoBehaviour
                     tempObj = Instantiate(Magazine.Dequeue());
                     tempObj.transform.localScale *= shootScale;
                     tempProjectile = tempObj.GetComponent<Projectile>();
+
                     nextShootTime = Time.time + 1f / (tempProjectile.shootSpeed + shootSpeed);
+                    tempProjectile.damage += shootDamage;
+                    tempProjectile.speed += shootSpeed;
+
+                    if (tempProjectile.buff != null && playerBuff)
+                        playerBuff.AddBuff(tempProjectile.buff);
+
                     tempProjectile.dir = Vector3.Normalize(mousePos - transform.position);
                     shootAngle = Mathf.Max(0, shootAngle);
                     tempProjectile.dir = Quaternion.AngleAxis(Random.Range(-shootAngle / 2, shootAngle / 2), Vector3.forward) * tempProjectile.dir;
+
                     rigidBody.AddForce(- tempProjectile.dir.normalized * tempProjectile.recoil * 50);
+
                     tempProjectile.transform.position = hand.transform.position;
+
                     MagazineInformation.instance.UpdateProjectileInformation();
                     crosshair.Shake();
                 }
@@ -108,9 +125,14 @@ public class PlayerShoot : MonoBehaviour
             reloadProgress = reloadTime / (1f / reloadSpeed);
         }
         yield return new WaitForSeconds(1f / reloadSpeed);
+        Magazine.Clear();
         for(int i = 0;i < originMagazine.Count;i++)
         {
             Magazine.Enqueue(originMagazine[i]);
+        }
+        if(playerBuff)
+        {
+            playerBuff.ClearBuff();
         }
         canShoot = true;
         MagazineInformation.instance.UpdateProjectileInformation();

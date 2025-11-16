@@ -21,22 +21,36 @@ public class GameManager : MonoBehaviour
     {
         EventCenter.GameStart += GameStart;
         EventCenter.GameOver += GameOver;
+        EventCenter.GamePause += GamePause;
+        EventCenter.GameResume += GameResume;
     }
     private void OnDisable()
     {
         EventCenter.GameStart -= GameStart;
         EventCenter.GameOver -= GameOver;
+        EventCenter.GamePause -= GamePause;
+        EventCenter.GameResume -= GameResume;
     }
     public void GameStart()
     {
-        isGamePlaying = true;
         if(player)
             Destroy(player);
         player = Instantiate(playerPrefab);
+        isGamePlaying = true;
     }
 
     public void GameOver()
     {
         isGamePlaying = false;
+    }
+
+    public void GamePause()
+    {
+        isGamePlaying = false;
+    }
+
+    public void GameResume()
+    {
+        isGamePlaying = true;
     }
 }

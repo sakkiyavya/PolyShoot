@@ -4,7 +4,16 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public Buff buff;
+    public virtual Buff buff
+    {
+        get { return new Buff();}
+    }
+    public virtual string ProjectileName
+    {
+        get { return "»ù´¡×Óµ¯";}
+    }
+    public int value = 100;
+
     public Color color;
     public float shootSpeed = 1f;
     public float damage = 5f;
@@ -21,7 +30,6 @@ public class Projectile : MonoBehaviour
     protected Material material;
     protected void Awake()
     {
-        shoot += ApplyBuff;
         material = GetComponent<SpriteRenderer>().material;
     }
     protected void Start()
@@ -35,20 +43,6 @@ public class Projectile : MonoBehaviour
             Move();
             LifeManage();
         }
-    }
-    public virtual void ApplyBuff()
-    {
-        if(buff)
-            buff.ApplyBuff();
-    }
-    public virtual void UndoBuff()
-    {
-        if(buff)
-            buff.UndoBuff();
-    }
-    protected void OnDestroy()
-    {
-        shoot -= ApplyBuff;
     }
     protected void Move()
     {

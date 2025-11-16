@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerState : MonoBehaviour
 {
     public static PlayerState instance;
+    public int money = 100;
     public enum State
     {
         alive = 0,
@@ -25,6 +26,7 @@ public class PlayerState : MonoBehaviour
 
     public Rigidbody2D rigidBody;
 
+    bool isInvicinble = false;
     Vector2 lastHit = Vector2.right;
     private void Awake()
     {
@@ -49,29 +51,51 @@ public class PlayerState : MonoBehaviour
 
     public void GetDamage(float d)
     {
-        currentHP -= d;
-        HPRoll.instance.HPChange(HPPercent);
+        if(!isInvicinble)
+        {
+            currentHP -= d;
+            DamageJump.instance.CreatDamageJump((int)d, transform.position);
+            HPRoll.instance.HPChange(HPPercent);
+            StartCoroutine(GetDamageInvincible());
+        }
     }
 
     public void GetHeal(float h)
     {
         currentHP += h;
+        DamageJump.instance.CreatDamageJump((int)h, transform.position, Color.green);
         HPRoll.instance.HPChange(HPPercent);
     }
 
+    public void GetMoney(int m)
+    {
+        money += m;
+    }
+    public bool LoseMoney(int m)
+    {
+        if(m <= money)
+        {
+            money -= m;
+            return true;
+        }
+        else
+            return false;
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.layer == 9)
+        if(!isInvicinble)
         {
-            if(collision.GetComponent<Projectile>())
+            if(collision.gameObject.layer == 9)
             {
-                GetDamage(collision.GetComponent<Projectile>().damage);
-                rigidBody.AddForce(collision.GetComponent<Projectile>().recoil * collision.GetComponent<Projectile>().dir.normalized * 50);
-                lastHit = collision.GetComponent<Projectile>().dir.normalized;
+                if(collision.GetComponent<Projectile>())
+                {
+                    GetDamage(collision.GetComponent<Projectile>().damage);
+                    rigidBody.AddForce(collision.GetComponent<Projectile>().recoil * collision.GetComponent<Projectile>().dir.normalized * 50);
+                    lastHit = collision.GetComponent<Projectile>().dir.normalized;
+                }
             }
-        }
 
-        if(collision.gameObject.layer == 10)
+            if(collision.gameObject.layer == 10)
         {
             if(collision.GetComponent<EnemyBase>() && collision.GetComponent<EnemyBase>().isContactDamage)
             {
@@ -81,7 +105,18 @@ public class PlayerState : MonoBehaviour
 
             }
         }
+        }
     }
-
+    IEnumerator GetDamageInvincible()
+    {
+        isInvicinble = true;
+        float t = 0.5f;
+        while (t > 0)
+        {
+            t -= Time.deltaTime;
+            yield return null;
+        }
+        isInvicinble = false;
+    }
 
 }

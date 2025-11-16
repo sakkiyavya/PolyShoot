@@ -11,22 +11,40 @@ public class EnemyBase : MonoBehaviour
     public float speed = 1;
     public float hitBackForce = 1;
     public float damage = 1f;
+    public int evalue = 5;
+    public float lifeTime = 30f;
 
     public Rigidbody2D rigidBody;
 
     public Vector2 moveDir = Vector2.up;
     protected float angle = 0;
     protected float currentHP = 30;
+    protected bool isDead = false;
     protected virtual void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
+    }
+    protected virtual void Start()
+    {
+        currentHP = MaxHP;
+    }
+    protected virtual void OnEnable()
+    {
+        EventCenter.GameOver += Dead;
+    }
+    protected virtual void OnDisable()
+    {
+        EventCenter.GameOver -= Dead;
     }
     protected virtual void Update()
     {
         if(GameManager.instance.isGamePlaying)
         {
-            if (currentHP <= 0)
+            if (currentHP <= 0 && !isDead)
                 Dead();
+            if(lifeTime <= 0 && !isDead)
+                Dead();
+            lifeTime -= Time.deltaTime;
             AI();
         }
     }
@@ -35,6 +53,9 @@ public class EnemyBase : MonoBehaviour
         if (GameManager.instance.isGamePlaying)
         {
             Move();
+        }else
+        {
+            rigidBody.velocity = Vector2.zero;
         }
     }
     protected virtual void AI()
@@ -71,14 +92,18 @@ public class EnemyBase : MonoBehaviour
     protected virtual void GetDamage(float d)
     {
         currentHP -= d;
+        DamageJump.instance.CreatDamageJump((int)d, transform.position);
     }
     protected virtual void GetHeal(float h)
     {
         currentHP += h;
+        DamageJump.instance.CreatDamageJump((int)h, transform.position, Color.green);
     }
     protected virtual void Dead()
     {
-
+        GetComponent<Collider2D>().enabled = false;
+        isDead = true;
+        PlayerState.instance.GetMoney(evalue);
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)

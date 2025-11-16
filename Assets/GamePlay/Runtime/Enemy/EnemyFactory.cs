@@ -4,25 +4,38 @@ using UnityEngine;
 
 public class EnemyFactory : MonoBehaviour
 {
+    public static EnemyFactory instance;
     public GameObject enemyPrefab;
-    public float interval = 1f;
+    public float interval = 2f;
     [Min(1)]
     public int perSpawnTime = 1;
 
+    bool isSpwan = false;
     float nextSpawnTime = 0;
     GameObject tempObj;
     float tempFloat;
-    void Start()
+    private void Awake()
     {
-        
+        instance = this;
     }
 
-    // Update is called once per frame
+    private void OnEnable()
+    {
+        EventCenter.GameOver += GameOver;
+    }
+    private void OnDisable()
+    {
+        EventCenter.GameOver -= GameOver;
+    }
+
     void Update()
     {
         if(GameManager.instance.isGamePlaying)
         {
-            if(nextSpawnTime < Time.time && enemyPrefab)
+            if(GameManager.instance.player.transform.position.x >= 13)
+                isSpwan = true;
+
+            if(nextSpawnTime < Time.time && enemyPrefab && isSpwan)
             {
                 nextSpawnTime = Time.time + interval;
                 for(int i = 0; i < perSpawnTime;i++)
@@ -35,5 +48,11 @@ public class EnemyFactory : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void GameOver()
+    {
+        isSpwan = false;
+        interval = 2f;
     }
 }
