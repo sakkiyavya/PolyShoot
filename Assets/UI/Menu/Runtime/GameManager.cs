@@ -31,6 +31,13 @@ public class GameManager : MonoBehaviour
         EventCenter.GamePause -= GamePause;
         EventCenter.GameResume -= GameResume;
     }
+    private void Update()
+    {
+        if(isGamePlaying)
+            Cursor.visible = false;
+        else
+            Cursor.visible = true;
+    }
     public void GameStart()
     {
         if(player)

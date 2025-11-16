@@ -16,6 +16,10 @@ public class ResolutionSetting : Menu
     };
     Vector2 resolution = new Vector2(1600, 900);
     int resolutionIndex = 2;
+    private void Start()
+    {
+        Screen.SetResolution((int)resolution.x, (int)resolution.y, FullScreenMode.Windowed);
+    }
     public void ResolutionChange()
     {
         resolutionIndex++;
